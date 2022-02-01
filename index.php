@@ -34,7 +34,7 @@ function deleteAll($dir, $t, $remove = false) {
 <body>
    <input type="file" id="file" name="file" />
    <input type="button" value="Upload" id="but_upload">
-
+<p id="msg1"></p>
 
 
 
@@ -58,7 +58,9 @@ console.log("uplo..")
           contentType: false,
           processData: false,
           success: function(response){
-          console.log(response)
+             document.getElementById('msg1').innerHTML = "DONE!!";
+          console.log(response);
+           
           },
        });
     }
