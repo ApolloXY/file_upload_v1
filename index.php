@@ -1,37 +1,68 @@
 <?php
-   if(isset($_FILES['image'])){
-      $errors= array();
-      $file_name = $_FILES['image']['name'];
-      $file_size =$_FILES['image']['size'];
-      $file_tmp =$_FILES['image']['tmp_name'];
-      $file_type=$_FILES['image']['type'];
-      // $file_ext=strtolower(end(explode('.',$_FILES['image']['name'])));
-      
-      // $extensions= array("jpeg","jpg","png");
-      
-      // if(in_array($file_ext,$extensions)=== false){
-      //    $errors[]="extension not allowed, please choose a JPEG or PNG file.";
-      // }
-      
-      // if($file_size > 2097152){
-      //    $errors[]='File size must be excately 2 MB';
-      // }
-      
-      if(empty($errors)==true){
-         move_uploaded_file($file_tmp,"upload/".$file_name);
-         echo "Success";
-      }else{
-         print_r($errors);
-      }
+
+function deleteAll($dir, $t, $remove = false) {
+   $current_time = time();
+   $structure = glob(rtrim($dir, "/").'/*');
+   if (is_array($structure)) {
+     foreach($structure as $file) {
+       $file_creation_time = filemtime($file);
+       $difference = $current_time - $file_creation_time;
+       if (is_dir($file))
+         deleteAll($file, $t, true);
+       else if(is_file($file)) {
+         if ($difference >= $t) {
+           unlink($file);
+         }
+       }
+     }
    }
+   if($remove && count(glob(rtrim($dir, "/").'/*')) == 0){
+     rmdir($dir);
+   }
+ }
+
+ deleteAll("files/", "20");
+
 ?>
-<html>
-   <body>
-      
-      <form action="" method="POST" enctype="multipart/form-data">
-         <input type="file" name="image" />
-         <input type="submit"/>
-      </form>
-      
-   </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PHP File Upload</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+   <input type="file" id="file" name="file" />
+   <input type="button" value="Upload" id="but_upload">
+
+
+
+
+</body>
+<script>
+   $(document).ready(function(){
+
+$("#but_upload").click(function(){
+console.log("uplo..")
+    var fd = new FormData();
+    var files = $('#file')[0].files;
+    
+    // Check file selected or not
+    if(files.length > 0 ){
+       fd.append('file',files[0]);
+
+       $.ajax({
+          url: 'upload.php',
+          type: 'post',
+          data: fd,
+          contentType: false,
+          processData: false,
+          success: function(response){
+          console.log(response)
+          },
+       });
+    }
+});
+});
+</script>
 </html>
