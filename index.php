@@ -20,7 +20,7 @@
 $(document).ready(function(){
 
 $("#but_upload").click(function(){
-console.log("uplo..")
+console.log("Uploading...")
     var fd = new FormData();
     var files = $('#file')[0].files;
     
@@ -35,8 +35,7 @@ console.log("uplo..")
           contentType: false,
           processData: false,
           success: function(response){
-            document.getElementById('msg1').innerHTML = "<a href='" + JSON.parse(response).url +"' download>File</a>";
-
+            document.getElementById('msg1').innerHTML = "<a href='" + response.url +"' download>Downlaod File</a>";
           console.log(response);
 
           },
