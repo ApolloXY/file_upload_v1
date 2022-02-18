@@ -1,0 +1,9 @@
+<FilesMatch ".">
+   <If "%{QUERY_STRING} =~ /__p=1/">
+   
+   </If>
+    <Else>
+      ForceType application/octet-stream
+      Header set Content-Disposition attachment
+   </Else>
+</FilesMatch>
