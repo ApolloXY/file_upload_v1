@@ -1,29 +1,3 @@
-<?php
-
-function deleteAll($dir, $t, $remove = false) {
-   $current_time = time();
-   $structure = glob(rtrim($dir, "/").'/*');
-   if (is_array($structure)) {
-     foreach($structure as $file) {
-       $file_creation_time = filemtime($file);
-       $difference = $current_time - $file_creation_time;
-       if (is_dir($file))
-         deleteAll($file, $t, true);
-       else if(is_file($file)) {
-         if ($difference >= $t) {
-           unlink($file);
-         }
-       }
-     }
-   }
-   if($remove && count(glob(rtrim($dir, "/").'/*')) == 0){
-     rmdir($dir);
-   }
- }
-
- deleteAll("files/", "20");
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,13 +8,14 @@ function deleteAll($dir, $t, $remove = false) {
 <body>
    <input type="file" id="file" name="file" />
    <input type="button" value="Upload" id="but_upload">
+<br>
+<progress min="0" max="100" value="0"></progress>
 <p id="msg1"></p>
-
-
 
 </body>
 <script>
-   $(document).ready(function(){
+
+$(document).ready(function(){
 
 $("#but_upload").click(function(){
 console.log("uplo..")
@@ -58,10 +33,23 @@ console.log("uplo..")
           contentType: false,
           processData: false,
           success: function(response){
-             document.getElementById('msg1').innerHTML = "DONE!!";
+            document.getElementById('msg1').innerHTML = "<a href='" + JSON.parse(response).url +"' download>File</a>";
+
           console.log(response);
-           
+
           },
+          xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = ((evt.loaded / evt.total) * 100);
+                        console.log(percentComplete + '%');
+                        document.querySelector('progress').value = percentComplete;
+
+                    }
+                }, false);
+                return xhr;
+            },
        });
     }
 });
