@@ -4,56 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP File Upload</title>
+    <meta name="theme-color" content="#23a6d5">
+    <title>File Upload</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>*{margin:0;padding:0}body{background:linear-gradient(-45deg,#e73c7e,#e73c7e,#23a6d5,#23d5ab);background-size:400% 400%;animation:gradient 5s ease infinite;height:100vh;position:relative;font-family:Lato,sans-serif}.wrapper{background-color:rgba(0,0,0,1);border-radius:30px;padding:40px 20px}.wrapper-out{border:4px solid rgb(0,0,0);width:300px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:35px;padding:40px 8px 5px;background:linear-gradient(45deg,#ee7752,#e73c7e,#23a6d5,#23d5ab);background-size:400% 200%;animation:gradient 5s ease infinite}.head1{background-image:linear-gradient(to right,#ff6333 20%,#cc00ff 100%);color:transparent;-webkit-background-clip:text;width:fit-content;margin:0 auto;font-size:40px;filter:drop-shadow(0 0 1px #fa2828)}@keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}.btn-hover{position:relative;left:50%;transform:translate(-50%);width:140px;font-size:16px;font-weight:600;color:#fff;cursor:pointer;margin:30px auto;height:45px;text-align:center;border:none;background-size:300% 100%;border-radius:50px;transition:all .4s ease-in-out;background-image:linear-gradient(to right,#667eea,#764ba2,#6B8DD6,#8E37D7);box-shadow:0 2px 15px 0 #667eeabf}.btn-hover:hover{background-position:100% 0;transition:all .4s ease-in-out}progress{position:relative;left:50%;transform:translate(-50%)}p{text-align:center;color:#fff}p a{color:#fff}.res-con{border:2px solid #fff;width:200px;margin:20px auto;border-radius:10px;display:flex;flex-direction:column}.res-con-up{padding:10px}.res-con-up svg{float:left}.res-con-up .filenamecon{max-width:130px;min-height:min-content;margin:2px 6px 0;float:left;display:flex;flex-direction:row;text-decoration:none;font-size:14px}.res-con-up .filenamecon2{max-width:130px;min-height:min-content;margin:0 8px;float:left;display:flex;flex-direction:row;text-decoration:none;font-size:12px}.res-con-up #filename{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.res-con-up #fileEx{float:left}.res-con-dw{margin:0 auto}.res-con-dw button{background-color:#fff;border:#fff solid 1px;padding:3px 5px;border-radius:5px;margin:0 0 15px;cursor:pointer}#error{color:rgb(0,225,255)}progress{border-radius:50%;height:10px}progress{color:lightblue}progress::-webkit-progress-value{background:rgb(43,255,0);border-radius:10px}progress::-webkit-progress-bar{background:#fff;border-radius:10px}</style>
 </head>
 <body>
-   <input type="file" id="file" name="file" />
-   <input type="button" value="Upload" id="but_upload">
-<br>
-<progress min="0" max="100" value="0"></progress>
-<p id="msg1"></p>
-
+<div class="wrapper-out">
+    <div class="wrapper">
+        <h1 class="head1">FileUpload</h1>
+        <input type="file" id="file" style="display: none;">
+        <button  onclick="document.getElementById('file').click()" class="btn-hover color-3">CHOOSE FILE</button>
+        <p id="msg"></p>
+        <progress value="0" min="0" max="100"></progress>
+        <div id="results"></div>
+    </div>
+    <div style="text-align: center; margin: 10px auto; width: 200px;">
+        <p><a href="/api">API</a></p>
+    </div>
+</div>
 </body>
-<script>
-
-$(document).ready(function(){
-
-$("#but_upload").click(function(){
-console.log("Uploading...")
-    var fd = new FormData();
-    var files = $('#file')[0].files;
-    
-    // Check file selected or not
-    if(files.length > 0 ){
-       fd.append('file',files[0]);
-
-       $.ajax({
-          url: 'upload.php',
-          type: 'post',
-          data: fd,
-          contentType: false,
-          processData: false,
-          success: function(response){
-            document.getElementById('msg1').innerHTML = "<a href='" + response.url +"' download>Downlaod File</a>";
-          console.log(response);
-
-          },
-          xhr: function() {
-                var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress", function(evt) {
-                    if (evt.lengthComputable) {
-                        var percentComplete = ((evt.loaded / evt.total) * 100);
-                        console.log(percentComplete + '%');
-                        document.querySelector('progress').value = percentComplete;
-
-                    }
-                }, false);
-                return xhr;
-            },
-       });
-    }
-});
-});
-</script>
+<script>function appendFile(e,t,n,o){var i=e.split("."),l=i.pop(),r=i.join(".");document.getElementById("results").insertAdjacentHTML("beforeend",'\n  <div class="res-con">\n  <div class="res-con-up">\n      <svg stroke="#fff" fill="#fff" stroke-width="0" viewBox="0 0 16 16"  width="30px" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.71 4.29l-3-3L10 1H4L3 2v12l1 1h9l1-1V5l-.29-.71zM13 14H4V2h5v4h4v8zm-3-9V2l3 3h-3z"></path></svg>\n\n      <div class="filenamecon"><p id="filename">'+r+'</p><p id="fileEx">.'+l+'</p></div> \n      <br>\n\n      <div class="filenamecon2"><p>'+t+'</p></div> \n   </div>\n  <div class="res-con-dw">\n      <button onclick="window.open(\''+n+"?__p=1', '_blank');\">Preview</button>\n      <button  onclick=\"navigator.clipboard.writeText('"+n+"'); this.innerHTML='Copied'; setTimeout(() => { this.innerHTML = 'Copy'}, 1000);\">Copy</button>\n      <button onclick=\"navigator.share({ title: 'Here is a file for you!', text: 'FileName: "+e+" https://rlu.ru/"+o+'\'});">Share</button>\n      <p style="font-size: 15px;"><b>URL : </b><a href="https://rlu.ru/'+o+'">rlu.ru/'+o+"</a></p><br>\n\n  </div>\n</div>\n  ")}function bytesToSize(e,t=2){if(0===e)return"0 Bytes";const n=t<0?0:t,o=Math.floor(Math.log(e)/Math.log(1024));return parseFloat((e/Math.pow(1024,o)).toFixed(n))+" "+["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"][o]}$(document).ready(function(){$("#msg").html("Select a file*"),$("#file").change(function(){var e=new FormData,t=$("#file")[0].files;t.length>0&&($("#msg").html("Getting ready to upload.."),e.append("file",t[0]),$.ajax({url:"https://filesuploadv1.up.railway.app/upload.php",type:"post",data:e,contentType:!1,processData:!1,success:function(e){$("#msg").html("Done!"),fetch("https://corsanywhere.herokuapp.com/https://rlu.ru/index.sema?a=api&del=3&link="+e.url).then(function(e){return e.text()}).then(function(t){console.log(t),appendFile(e.name,bytesToSize(e.size),e.url,t.split("/")[3])}).catch(function(t){appendFile(e.name,bytesToSize(e.size),e.url,"")})},error:function(e){console.log(e),$("#msg").html("An Error Occured!")},xhr:function(){var e=new window.XMLHttpRequest;return e.upload.addEventListener("progress",function(e){if(e.lengthComputable){var t=e.loaded/e.total*100;console.log(t+"%"),$("#msg").html("Uploading...."+t.toFixed(2)+"%"),document.querySelector("progress").value=t}},!1),e}}))})});</script>
 </html>
