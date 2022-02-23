@@ -1,6 +1,6 @@
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule . /HTML/FileUpload/expired.html [L,R=301]
+RewriteRule . /expired.html [L,R=301]
 
 <FilesMatch ".">
    <If "%{QUERY_STRING} =~ /__p=1/">
