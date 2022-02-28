@@ -45,7 +45,7 @@ define('CSAJAX_DEBUG', false);
  * A set of valid cross domain requests
  */
 $valid_requests = array(
-    // 'example.com'
+   'https://ipapi.co/json'
 );
 
 /**
