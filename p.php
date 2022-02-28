@@ -27,7 +27,7 @@ define('CSAJAX_FILTERS', true);
  * If set to false, $valid_requests should hold the whole URL ( without the parameters ) i.e. http://example.com/this/is/long/url/
  * Recommended value: false (for security reasons - do not forget that anyone can access your proxy)
  */
-define('CSAJAX_FILTER_DOMAIN', false);
+define('CSAJAX_FILTER_DOMAIN', true);
 
 /**
  * Enables or disables Expect: 100-continue header. Some webservers don't 
@@ -45,7 +45,8 @@ define('CSAJAX_DEBUG', false);
  * A set of valid cross domain requests
  */
 $valid_requests = array(
-   'https://ipapi.co/json'
+     'ipapi.co',
+     'rlu.ru'
 );
 
 /**
