@@ -1,60 +1,9 @@
 <?php
-
-/**
- * AJAX Cross Domain (PHP) Proxy 0.8
- * Copyright (C) 2016 Iacovos Constantinou (https://github.com/softius)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * Enables or disables filtering for cross domain requests.
- * Recommended value: true
- */
 define('CSAJAX_FILTERS', true);
-
-/**
- * If set to true, $valid_requests should hold only domains i.e. a.example.com, b.example.com, usethisdomain.com
- * If set to false, $valid_requests should hold the whole URL ( without the parameters ) i.e. http://example.com/this/is/long/url/
- * Recommended value: false (for security reasons - do not forget that anyone can access your proxy)
- */
 define('CSAJAX_FILTER_DOMAIN', true);
-
-/**
- * Enables or disables Expect: 100-continue header. Some webservers don't 
- * handle this header correctly.
- * Recommended value: false
- */
 define('CSAJAX_SUPPRESS_EXPECT', false);
-
-/**
- * Set debugging to true to receive additional messages - really helpful on development
- */
 define('CSAJAX_DEBUG', false);
 
-/**
- * A set of valid cross domain requests
- */
-$valid_requests = array(
-     'ipapi.co',
-     'rlu.ru'
-);
-
-/**
- * Set extra multiple options for cURL
- * Could be used to define CURLOPT_SSL_VERIFYPEER & CURLOPT_SSL_VERIFYHOST for HTTPS
- * Also to overwrite any other options without changing the code
- * See http://php.net/manual/en/function.curl-setopt-array.php
- */
 $curl_options = array(
     // CURLOPT_SSL_VERIFYPEER => false,
     // CURLOPT_SSL_VERIFYHOST => 2,
@@ -98,9 +47,8 @@ if (isset($_REQUEST['csurl'])) {
 } elseif (isset($_SERVER['HTTP_X_PROXY_URL'])) {
     $request_url = urldecode($_SERVER['HTTP_X_PROXY_URL']);
 } else {
-    header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
-    header('Status: 404 Not Found');
-    $_SERVER['REDIRECT_STATUS'] = 404;
+    header('HTTP/1.1 503');
+    echo "Error 503";
     exit;
 }
 
@@ -121,20 +69,13 @@ if (preg_match('!' . $_SERVER['SCRIPT_NAME'] . '!', $request_url) || empty($requ
 if (CSAJAX_FILTERS) {
     $parsed = $p_request_url;
     if (CSAJAX_FILTER_DOMAIN) {
-        if (!in_array($parsed['host'], $valid_requests)) {
-            csajax_debug_message('Invalid domain - ' . $parsed['host'] . ' does not included in valid requests');
-            exit;
-        }
+ 
     } else {
         $check_url = isset($parsed['scheme']) ? $parsed['scheme'] . '://' : '';
         $check_url .= isset($parsed['user']) ? $parsed['user'] . ($parsed['pass'] ? ':' . $parsed['pass'] : '') . '@' : '';
         $check_url .= isset($parsed['host']) ? $parsed['host'] : '';
         $check_url .= isset($parsed['port']) ? ':' . $parsed['port'] : '';
         $check_url .= isset($parsed['path']) ? $parsed['path'] : '';
-        if (!in_array($check_url, $valid_requests)) {
-            csajax_debug_message('Invalid domain - ' . $request_url . ' does not included in valid requests');
-            exit;
-        }
     }
 }
 
