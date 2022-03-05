@@ -94,6 +94,7 @@ if (CSAJAX_SUPPRESS_EXPECT) {
 
 curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);   // (re-)send headers
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);     // return response
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);    // follow redirect
 curl_setopt($ch, CURLOPT_HEADER, true);       // enabled response headers
 // add data for POST, PUT or DELETE requests
 if ('POST' == $request_method) {
