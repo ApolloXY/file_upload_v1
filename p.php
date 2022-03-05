@@ -97,9 +97,6 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);     // return response
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);    // follow redirect
 curl_setopt($ch, CURLOPT_HEADER, true);       // enabled response headers
 /////////////////////////////////////////////////
-curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Host: graph.facebook.com'));
 
 // add data for POST, PUT or DELETE requests
 if ('POST' == $request_method) {
