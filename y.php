@@ -1,6 +1,5 @@
 <?php
 function getVideoInfo($video_id){
-
     $ch = curl_init();
 
     curl_setopt($ch, CURLOPT_URL, 'https://www.youtube.com/youtubei/v1/player?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8');
