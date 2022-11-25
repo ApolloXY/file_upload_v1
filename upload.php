@@ -71,8 +71,10 @@ if(isset($_FILES['file']['name'])){
       if(move_uploaded_file($_FILES['file']['tmp_name'],$location)){
          // deleteExp($location);
 //         $url = (strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,strpos( $_SERVER["SERVER_PROTOCOL"],'/'))))."://" .$_SERVER['HTTP_HOST'] . dirname($_SERVER["PHP_SELF"]).'/'.str_replace(' ', '%20', $location);;
-
-         $url = "https://" . $_SERVER['HTTP_REFERER'] . dirname($_SERVER["PHP_SELF"]).'/'.str_replace(' ', '%20', $location);;
+         $urlParts = parse_url($_SERVER['HTTP_REFERER']);
+         $baseUrl = $urlParts["scheme"] . "://" . $urlParts["host"]; 
+         $url = $baseUrl . dirname($_SERVER["PHP_SELF"]).str_replace(' ', '%20', $location);; 
+         //$url = "https://" . . dirname($_SERVER["PHP_SELF"]).'/'.str_replace(' ', '%20', $location);;
          $response = array(
             'url' => $url,
             'size' => $fileSize,
