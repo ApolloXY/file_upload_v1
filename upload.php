@@ -72,7 +72,7 @@ if(isset($_FILES['file']['name'])){
          // deleteExp($location);
 //         $url = (strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,strpos( $_SERVER["SERVER_PROTOCOL"],'/'))))."://" .$_SERVER['HTTP_HOST'] . dirname($_SERVER["PHP_SELF"]).'/'.str_replace(' ', '%20', $location);;
 
-         $url = "https://" .$_SERVER['HTTP_HOST'] . dirname($_SERVER["PHP_SELF"]).'/'.str_replace(' ', '%20', $location);;
+         $url = "https://" . $_SERVER['HTTP_REFERER'] . dirname($_SERVER["PHP_SELF"]).'/'.str_replace(' ', '%20', $location);;
          $response = array(
             'url' => $url,
             'size' => $fileSize,
